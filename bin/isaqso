@@ -6,7 +6,7 @@ import numpy as np
 import fitsio
 from IPython.display import SVG
 import scipy.misc
-from isqso import models
+from isaqso import models
 from keras.utils import plot_model
 from keras.utils.vis_utils import model_to_dot
 from keras.models import load_model
@@ -68,14 +68,15 @@ sample_weights_X = np.ones(ndata)
 sample_weights_z = (Y.argmax(axis=1) == 2) | (Y.argmax(axis=1) == 3)
 sample_weights_bal = (Y.argmax(axis=1) == 2) | (Y.argmax(axis=1) == 3)
 print X.shape, Y.shape, z.shape, bal.shape
-try:
+#try:
+if True:
     print args.model
     model = getattr(models, args.model)(X[0,:,None].shape, classes = Y.shape[1], reg = args.reg)
     print "compiling model {}".format(args.model)
     model.compile(optimizer='adam', loss = ['categorical_crossentropy', 'mean_squared_error','binary_crossentropy'], metrics=['accuracy'])
-except:
-    print "loading model from {}".format(args.model)
-    model = load_model(args.model)
+#except:
+#    print "loading model from {}".format(args.model)
+#    model = load_model(args.model)
 
 print "starting fit"
 history = model.fit(X[:,:,None], [Y, z, bal], epochs = args.epochs, batch_size = args.batch, \
